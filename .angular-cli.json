@@ -13,7 +13,7 @@
         {
           "glob": "**/*",
           "input": "../node_modules/leaflet/dist/images",
-          "output": "./assets/"
+          "output": "leaflet/"
         }
       ],
       "index": "index.html",
@@ -25,7 +25,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/leaflet/dist/leaflet.css"
+        "../node_modules/leaflet/dist/leaflet.css",
+        "../node_modules/leaflet-draw/dist/leaflet.draw.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

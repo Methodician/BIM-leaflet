@@ -1,6 +1,29 @@
-<div style="height: 90vh;"
+
+<div class="map"
+      leaflet
+      (leafletMapReady)="onMapReady($event)"
+      [leafletOptions]="options"
+      [leafletLayersControl]="layersControl"
+>
+
+  <div leafletDraw
+      [leafletDrawOptions]="drawOptions"
+      (leafletDrawReady)="onDrawReady($event)"
+  >
+  </div>
+
+</div>
+
+<!-- REMAINS FROM ORIGINAL DOCUMENTATION -->
+<!-- <div class="map"
       leaflet
       [leafletOptions]="mapOptions"
       [leafletLayersControl]="layersControl"
-      [leafletLayers]="layers">
-</div>
+      [leafletLayers]="layers"
+      (leafletMapReady)="onMapReady($event)"
+      > -->
+      <!-- <div *ngFor="let layer of layers"
+            [leafletLayer]="layer"
+            (click)="layerClicked($event, layer)">
+      </div> -->
+<!-- </div> -->
