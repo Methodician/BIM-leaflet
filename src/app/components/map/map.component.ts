@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { tileLayer, latLng, circle, polygon, marker, MarkerOptions, icon, geoJSON, Map, polyline, point } from 'leaflet';
 import { JsonImportService } from '@app/services/json-import.service';
 
+import * as L from 'leaflet';
+import { FeatureGroup } from 'leaflet';
+import { LayerGroup } from 'leaflet';
+import { Polyline } from 'leaflet';
+import { Layer } from 'leaflet';
+
 @Component({
   selector: 'leaflet-map',
   templateUrl: './map.component.html',
@@ -10,6 +16,8 @@ import { JsonImportService } from '@app/services/json-import.service';
 export class MapComponent implements OnInit {
   map;
   seedData = [geoJSON(null)];
+
+  editablLayers = new FeatureGroup();
 
   //  COPY AND PASTED FROM https://www.asymmetrik.com/ngx-leaflet-tutorial-angular-cli/
   // Define our base layers so we can reference them multiple times
@@ -76,10 +84,13 @@ export class MapComponent implements OnInit {
 
   // Set the initial set of displayed layers (we could also use the leafletLayers input binding for this)
   options = {
-    layers: [ this.googleMaps, this.route, this.summit, this.paradise ],
+    layers: [ this.googleMaps, this.editablLayers ],
     zoom: 7,
     center: latLng([ 46.879966, -121.726909 ])
   };
+
+  
+  // editableLayers = new FeatureGroup(new LayerGroup(this.route))
 
   drawOptions = {
     position: 'topright',
@@ -98,12 +109,21 @@ export class MapComponent implements OnInit {
                color: '#aaaaaa'
            }
        }
+    },
+    edit: {
+      featureGroup: this.editablLayers,
+      remove: false
     }
  };
 
 
-  ngOnInit(){
 
+
+  ngOnInit(){
+    this.editablLayers
+    .addLayer(this.route)
+    .addLayer(this.summit)
+    .addLayer(this.paradise);
   }
 
   onMapReady(map: Map) {
@@ -112,11 +132,57 @@ export class MapComponent implements OnInit {
       maxZoom: 12,
       animate: true
     });
+
+    map.on(L.Draw.Event.CREATED, (e: any) => {
+      this.editablLayers.addLayer(e.layer);
+    });
+
+    map.on(L.Draw.Event.EDITED, (e: any) => {
+      console.log(this.editablLayers);
+    });
+
+    this.editablLayers.on('click', (e: any) => {
+      // console.log(e);
+      const type = this.getLayerType(e.layer);
+      console.log(type);
+      // console.log(e);
+    })
+    // for(let l of this.editablLayers.getLayers()){
+    //   l.on('click', (e: any) => {
+    //     console.log(e);
+    //     console.log(l);
+    //   });
+    // }
+
+    map.addEventListener('click', (e) => {
+      // console.log(e);
+    })
   }
 
-  onDrawReady(draw){
-    console.log(draw);
-  }
+  getLayerType(layer: Layer) {
+    
+        if (layer instanceof L.Circle) {
+            return 'circle';
+        }
+    
+        if (layer instanceof L.Marker) {
+            return 'marker';
+        }
+    
+        if ((layer instanceof L.Polyline) && ! (layer instanceof L.Polygon)) {
+            return 'polyline';
+        }
+    
+        if ((layer instanceof L.Polygon) && ! (layer instanceof L.Rectangle)) {
+            return 'polygon';
+        }
+    
+        if (layer instanceof L.Rectangle) {
+            return 'rectangle';
+        }
+    
+    };
+
 
 
   //  REMAINS FROM ORIGINAL DOCUMENTATION:
