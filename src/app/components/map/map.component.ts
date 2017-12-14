@@ -55,9 +55,9 @@ export class MapComponent implements OnInit {
   ngOnInit() {
     // console.log(this.layers);
     const data = this.jsonSvc.getData();
-    console.log(data);
-    // this.layersControl.overlays['The World'] = geoJSON(data);
-    this.layers.push(geoJSON(data));
+    console.log(data)
+    this.layersControl.overlays['The World'] = geoJSON(data);
+    // this.layers.push(geoJSON(data));
     // console.log(this.layers);
     // let layers = [...this.layers];
     // layers = data;
