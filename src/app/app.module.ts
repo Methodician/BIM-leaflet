@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { MapComponent } from '@components/map/map.component';
 import { MapDrawComponent } from './components/map-draw/map-draw.component';
 
-import { JsonImportService } from '@services/json-import.service';
+// import { JsonImportService } from '@services/json-import.service';
 import { MapService } from '@app/services/map.service';
 import { environment } from 'environments/environment';
 
@@ -31,7 +31,7 @@ import { environment } from 'environments/environment';
     LeafletDrawModule.forRoot()
   ],
   providers: [
-    JsonImportService,
+    // JsonImportService,
     MapService
   ],
   bootstrap: [AppComponent]
